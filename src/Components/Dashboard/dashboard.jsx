@@ -1,25 +1,12 @@
 import "./dashboard.css"
-//import Chart from "react-google-charts";
 import { Line, Bar } from 'react-chartjs-2'
+import { analytics } from 'firebase/analytics'
 import React, { useState, useEffect } from 'react'
-import { DashboardHeader } from "../Header/header";
-import { useHistory } from 'react-router-dom/cjs/react-router-dom';
+import { DashboardHeader } from "../Header/header"
+import { useHistory } from 'react-router-dom/cjs/react-router-dom'
 import { Chart as Charts, CategoryScale, LinearScale, PointElement, LineElement, ArcElement, BarElement, Legend, Title, Tooltip, Filler } from 'chart.js'
 
 Charts.register(CategoryScale, LinearScale, PointElement, LineElement, ArcElement, BarElement, Legend, Title, Tooltip, Filler);
-
-const datapoints = [20, 45, 5, 50, 45, 25, 30];
-const datapoints1 = [70, 0, 55, 37, 50, 15, 30];
-const datapoints2 = [10, 40, 15, 20, 5, 35, 30];
-const yearLabels = ['2020', '2021', '2022', '2023', '2024'];
-const weekLabels = ['January', 'February', 'March', 'April', 'May', 'June', 'July'];
-const dailyLabels = ['Monday', 'Tuesday', 'Wednesday', 'Thursday', 'Friday', 'Saturday', 'Sunday'];
-const monthLabels = ['Jan', 'Feb', 'Mar', 'Apr', 'May', 'Jun', 'Jul', 'Aug', 'Sep', 'Oct', 'Nov', 'Dec'];
-const datasets = [
-  { label: "ACCA", fill: true, data: datapoints, borderColor: "#660000", borderWidth: 0.75 },
-  { label: "CPA", fill: true, data: datapoints1, borderColor: "#1E88E5", borderWidth: 0.75 },
-  { label: "Skil", fill: true, data: datapoints2, borderColor: "#8db600", borderWidth: 0.75 },
-];
 
 export default function Dashboard() {
   const history = useHistory();
@@ -37,34 +24,22 @@ export default function Dashboard() {
   }, [history]);
   return (
     <div style={{ fontFamily: "Noto Sans" }} className="w-full">
-      <DashboardHeader title={"Dashboard"}/>
-      <div className="flex justify-end px-3 py-7">
-        <select id="options" className='border border-black px-2 py-4 rounded-lg w-1/5' value={selectedOption} onChange={handleChange}>
-          <option value="" className="block text-center p-4 text-xs text-black capitalize transition-colors duration-300 transform hover:bg-gray-100">Select Time Range</option>
-          <option value="option1" className="block text-center p-4 text-sm text-black capitalize transition-colors duration-300 transform hover:bg-gray-100">Last 7 Days</option>
-          <option value="option1" className="block text-center p-4 text-sm text-black capitalize transition-colors duration-300 transform hover:bg-gray-100">Last Week</option>
-          <option value="option2" className="block text-center p-4 text-sm text-black capitalize transition-colors duration-300 transform hover:bg-gray-100">Last Month</option>
-          <option value="option3" className="block text-center p-4 text-sm text-black capitalize transition-colors duration-300 transform hover:bg-gray-100">Last Year</option>
-          <option value="option4" className="block text-center p-4 text-sm text-black capitalize transition-colors duration-300 transform hover:bg-gray-100">All Time</option>
-          <option value="option4" className="block text-center p-4 text-sm text-black capitalize transition-colors duration-300 transform hover:bg-gray-100">Custom</option>
-        </select>
-      </div>
+      <DashboardHeader title={"Dashboard"} />
       <section className="container px-5 py-7">
         <div className="flex flex-wrap -m-4">
-          <EnrollmentTile title={"Total Enrollments"} number={100} path={'/total-enrollments'} />
-          <EnrollmentTile title={"Skill Enrollments"} number={45} path={'/skill-dev-enrollments'} />
-          <EnrollmentTile title={"ACCA Enrollments"} number={30} path={'/acca-enrollments'} />
-          <EnrollmentTile title={"CPA Enrollments"} number={25} path={'/CPA-enrollments'} />
+          <MetricTile title={"Total Sales"} number={100} path={'/total-enrollments'} />
+          <MetricTile title={"Sales this Month"} number={45} path={'/skill-dev-enrollments'} />
+          <MetricTile title={"ACCA Enrollments"} number={30} path={'/acca-enrollments'} />
+          <MetricTile title={"CPA Enrollments"} number={25} path={'/CPA-enrollments'} />
         </div>
       </section>
-      {/* <LineChart /> */}
       <DualGraphs />
       <section className="py-3 px-3 flex"><UserLists /></section>
     </div>
   );
 }
 
-const EnrollmentTile = ({ title, number, path }) => {
+const MetricTile = ({ title, number, path }) => {
   const history = useHistory();
   const handleButtonClick = () => {
     history.push(path);
@@ -74,7 +49,7 @@ const EnrollmentTile = ({ title, number, path }) => {
       <button onClick={() => handleButtonClick()} className='flex justify-between items-center text-start w-full p-1'>
         <div className="px-5 py-7 w-full rounded-lg shadow-lg border border-gray-200 flex-col relative overflow-hidden items-center">
           <div className="flex justify-between items-center">
-            <h2 className="text-lg w-1/2">{title}</h2>
+            <h2 className="text-sm w-1/2">{title}</h2>
             <h1 className='text-3xl font-semibold py-2'>{number}</h1>
           </div>
         </div></button>
@@ -82,103 +57,6 @@ const EnrollmentTile = ({ title, number, path }) => {
   )
 }
 
-
-const LineChart = () => {
-  const [activeTab, setActiveTab] = useState('Daily');
-  const openTab = (event, tabName) => {
-    event.preventDefault();
-    setActiveTab(tabName);
-  };
-  const dailyData = {
-    fill: true,
-    labels: dailyLabels,
-    datasets: datasets,
-    plugins: { legend: { display: true, position: 'top' }, },
-  };
-  const weeklyData = {
-    fill: true,
-    labels: weekLabels,
-    datasets: datasets,
-    plugins: { legend: { display: true, position: 'top' }, },
-  };
-  const monthlyData = {
-    fill: true,
-    labels: monthLabels,
-    datasets: datasets,
-    plugins: { legend: { display: true, position: 'top' }, },
-  };
-  const yearlyData = {
-    fill: true,
-    labels: yearLabels,
-    datasets: datasets,
-    plugins: { legend: { display: true, position: 'top' }, },
-  };
-  const value = 10;
-  const maxValue = 20;
-  const percentage = (value / maxValue) * 100;
-  const options = {
-    responsive: true,
-    plugins: {
-      tooltip: {
-        callbacks: {
-          label: (tooltipItem) => {
-            if (tooltipItem.dataIndex === 0) {
-              return `Used: ${value}`;
-            } else {
-              return `Remaining: ${maxValue - value}`;
-            }
-          },
-        },
-      },
-      legend: { display: false, },
-    },
-    cutout: '70%',
-  };
-  return (
-    <section className="py-12 px-3">
-      <div className="w-full p-6 py-10 shadow-xl rounded rounded-xl border border-gray-200 flex items-center justify-between">
-        <div className="w-2/3 justify-between px-12">
-          <div className="flex border border-purple-800 rounded overflow-hidden mt-6 justify-center tab-bar">
-            <button className={`tab-button py-1 px-3.5 w-full focus:outline-none ${activeTab === 'Daily' ? 'text-white bg-purple-800 font-medium' : ''}`} onClick={(event) => openTab(event, 'Daily')}>Daily</button>
-            <button className={`tab-button py-1 px-3.5 w-full focus:outline-none ${activeTab === 'Weekly' ? 'text-white font-medium bg-purple-800' : ''}`} onClick={(event) => openTab(event, 'Weekly')}>Weekly</button>
-            <button className={`tab-button py-1 px-3.5 w-full focus:outline-none ${activeTab === 'Monthly' ? 'text-white font-medium bg-purple-800' : ''}`} onClick={(event) => openTab(event, 'Monthly')}>Monthly</button>
-            <button className={`tab-button py-1 px-3.5 w-full focus:outline-none ${activeTab === 'Yearly' ? 'text-white font-medium bg-purple-800' : ''}`} onClick={(event) => openTab(event, 'Yearly')}>Yearly</button>
-          </div>
-          <div className="tab-content" id="Daily" style={{ display: activeTab === 'Daily' ? 'block' : 'none' }}><Line data={dailyData} options={options} /></div>
-          <div className="tab-content" id="Weekly" style={{ display: activeTab === 'Weekly' ? 'block' : 'none' }}><Line data={weeklyData} options={options} /></div>
-          <div className="tab-content" id="Monthly" style={{ display: activeTab === 'Monthly' ? 'block' : 'none' }}><Line data={monthlyData} options={options} /></div>
-          <div className="tab-content" id="Yearly" style={{ display: activeTab === 'Yearly' ? 'block' : 'none' }}><Line data={yearlyData} options={options} /></div>
-        </div>
-        <div className="w-1/3 flex-col px-6 py-1">
-          <h1 className='text-2xl p-2'>Annual Projected Amount</h1>
-          <div className="flex py-3 px-4 justify-between">
-            <h2 className='text-xl text-purple-800 font-bold'>200000</h2>
-            <h2 className='text-lg text-green-600 font-semibold'>20%</h2>
-          </div>
-          <div className="border-b border-purple-800"></div>
-          <h1 className='text-2xl p-2'>Annual Actual Amount</h1>
-          <div className="flex py-3 px-4 justify-between">
-            <h2 className='text-xl text-purple-800 font-bold'>200000</h2>
-            <h2 className='text-lg text-green-600 font-semibold'>20%</h2>
-          </div>
-          <div className="border-b border-purple-800"></div>
-          <h1 className='text-2xl p-2'>Monthly Projected Amount</h1>
-          <div className="flex py-3 px-4 justify-between">
-            <h2 className='text-xl text-purple-800 font-bold'>200000</h2>
-            <h2 className='text-lg text-green-600 font-semibold'>20%</h2>
-          </div>
-          <div className="border-b border-purple-800"></div>
-          <h1 className='text-2xl p-2'>Monthly Actual Amount</h1>
-          <div className="flex py-3 px-4 justify-between">
-            <h2 className='text-xl text-purple-800 font-bold'>200000</h2>
-            <h2 className='text-lg text-green-600 font-semibold'>20%</h2>
-          </div>
-          <div className="border-b border-purple-800"></div>
-        </div>
-      </div>
-    </section>
-  );
-}
 
 const DualGraphs = () => {
   const datapoints = [20000, 45000, 45000];
@@ -267,7 +145,6 @@ const DualGraphs = () => {
             </div>
             <div className="h-[20vw] py-5">
               <Bar data={barData} options={options} />
-              {/* <Chart chartType="Bar" data={barData} options={options} /> */}
             </div>
           </div>
         </div>
@@ -282,26 +159,6 @@ const UserLists = () => {
   const sales_team = [
     { name: "Kashish Sahu", amount: "₹1,00,000", enrollments: 15, photoURL: "" },
     { name: "Anjali Singh", amount: "₹80,000", enrollments: 13, photoURL: "" },
-    // { name: "", amount: "₹1,00,000", enrollments: 15, photoURL: "" },
-    // { name: "", amount: "₹1,00,000", enrollments: 15, photoURL: "" },
-    // { name: "", amount: "₹1,00,000", enrollments: 15, photoURL: "" },
-    // { name: "", amount: "₹1,00,000", enrollments: 15, photoURL: "" },
-    // { name: "", amount: "₹1,00,000", enrollments: 15, photoURL: "" },
-    // { name: "", amount: "₹1,00,000", enrollments: 15, photoURL: "" },
-    // { name: "", amount: "₹1,00,000", enrollments: 15, photoURL: "" },
-    // { name: "", amount: "₹1,00,000", enrollments: 15, photoURL: "" },
-  ]
-  const tasks = [
-    { name: "Task 1", photoURL: "" },
-    { name: "Task 2", photoURL: "" },
-    { name: "Task 3", photoURL: "" },
-    { name: "Task 4", photoURL: "" },
-    { name: "Task 5", photoURL: "" },
-    { name: "Task 6", photoURL: "" },
-    { name: "Task 7", photoURL: "" },
-    { name: "Task 8", photoURL: "" },
-    { name: "Task 9", photoURL: "" },
-    { name: "Task 10", photoURL: "" },
   ]
   const [selectedOption, setSelectedOption] = useState('');
   const handleChange = (event) => {

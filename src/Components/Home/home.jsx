@@ -1,7 +1,7 @@
 import "./home.css"
 import { tabs } from "./tabs"
 import React, { useState } from 'react'
-import Image from "../../assets/main-logo.png"
+import Image from "../../assets/logo-nobg.png"
 
 export default function Home() {
     return (<VerticalTabs tabs={tabs} />)
@@ -19,15 +19,12 @@ const VerticalTabs = ({ tabs }) => {
                     </div>
                     <div className="py-7">
                         {tabs.map((tab, index) => (
-                            <div key={index} className={`tab-item p-5 hover:bg-purple-300 ${index === activeTab ? 'active bg-purple-400 border-r-8 border-purple-500 font-bold' : ''}`} onClick={() => handleClick(index)}>
+                            <div key={index} className={`tab-item p-5 hover:bg-purple-300 ${index === activeTab ? 'active bg-purple-500 border-r-8 border-purple-600 font-bold' : ''}`} onClick={() => handleClick(index)}>
                                 <span className="tab-icon">{tab.icon}</span>
                                 <span className="tab-text px-2">{tab.label}</span>
                             </div>
 
                         ))}
-                        {/* <span className="text-center w-full">
-                            <i class="fa-solid fa-arrow-right"></i>
-                        </span> */}
                     </div>
                     <div></div>
                 </div>

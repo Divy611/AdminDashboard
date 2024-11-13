@@ -24,7 +24,7 @@ export default function Header() {
   )
 }
 
-export function DashboardHeader({title}) {
+export function DashboardHeader({ title }) {
   return (
     <header style={{ fontFamily: "Noto Sans" }} className="mx-auto flex flex-wrap flex-col md:flex-row items-center justify-between px-4 py-2">
       <div className='flex items-center'>
@@ -37,7 +37,7 @@ export function DashboardHeader({title}) {
 
 
 const DropdownMenu = () => {
-  const history=useHistory();
+  const history = useHistory();
   const dropdownRef = useRef(null);
   const [isOpen, setIsOpen] = useState(false);
   const [authStatus, setAuthStatus] = useState(AuthStatus.NOT_DETERMINED);
@@ -65,24 +65,25 @@ const DropdownMenu = () => {
     };
   }, [isOpen]);
   return (
-    <div className="dropdown" ref={dropdownRef}>
-      <button onClick={toggleDropdown} className="dropdown-button rounded-lg border-0 py-1 px-3 focus:outline-none hover:bg-gray-50 rounded text-base mt-4 md:mt-0">
-        <div className="flex justify-between items-center">
-          <div className="flex-col text-start">
-            <h1 className='text-xl font-semibold'>Kapil Arora</h1>
-            <h2 className='text-md'>kapil.arora@in.gt.com</h2>
-          </div>
-          <div className="w-12 h-12">
-            <img src={Image1} className='rounded-full' alt="" />
-          </div>
-        </div>
-      </button>
-      {isOpen && (
-        <ul className="dropdown-menu z-10 rounded-lg">
-          <Link to="/admin"><li className="dropdown-item p-5">Admin Profile</li></Link>
-          <button className="w-full text-start" onClick={logOut}><li className="dropdown-item p-5">Log out</li></button>
-        </ul>
-      )}
-    </div>
+    <></>
+    // <div className="dropdown" ref={dropdownRef}>
+    //   <button onClick={toggleDropdown} className="dropdown-button rounded-lg border-0 py-1 px-3 focus:outline-none hover:bg-gray-50 rounded text-base mt-4 md:mt-0">
+    //     <div className="flex justify-between items-center">
+    //       <div className="flex-col text-start">
+    //         <h1 className='text-xl font-semibold'>Kapil Arora</h1>
+    //         <h2 className='text-md'>kapil.arora@in.gt.com</h2>
+    //       </div>
+    //       <div className="w-12 h-12">
+    //         <img src={Image1} className='rounded-full' alt="" />
+    //       </div>
+    //     </div>
+    //   </button>
+    //   {isOpen && (
+    //     <ul className="dropdown-menu z-10 rounded-lg">
+    //       <Link to="/admin"><li className="dropdown-item p-5">Admin Profile</li></Link>
+    //       <button className="w-full text-start" onClick={logOut}><li className="dropdown-item p-5">Log out</li></button>
+    //     </ul>
+    //   )}
+    // </div>
   );
 };

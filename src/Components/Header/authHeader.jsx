@@ -1,6 +1,5 @@
 import React from 'react'
-import Image1 from "../../assets/main-logo.png"
-import Image from "../../assets/grant-thornton.png"
+import Image from '../../assets/logo-nobg.png'
 
 export default function AuthHeader() {
     return (
@@ -11,9 +10,7 @@ export default function AuthHeader() {
                 </div>
             </div>
             <div className='flex items-center'>
-                <div className="flex title-font font-medium items-center text-gray-900 mb-4 md:mb-0">
-                    <img src={Image1} className='h-13 w-40' alt="" />
-                </div>
+                <div className="flex title-font font-medium items-center text-gray-900 mb-4 md:mb-0"></div>
             </div>
         </header>
     )

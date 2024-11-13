@@ -1,37 +1,33 @@
 import "./login.css"
-import { AuthStatus } from "../../App"
+import { AuthStatus } from '../../App'
 import React, { useState } from 'react'
+import { auth } from '../../firebase-config'
+import { signInWithEmailAndPassword } from 'firebase/auth'
 import { Link, Redirect } from "react-router-dom/cjs/react-router-dom.min"
 
-const users = [
-    { email: 'divy.parikh@in.gt.com', password: 'Divy@123' },
-    { email: 'anuj.kumar@in.gt.com', password: 'Anuj@123' },
-    { email: 'kapil.arora@in.gt.com', password: 'Kapil@123' },
-    { email: 'amit.chauhan1@in.gt.com', password: 'Amit@123' },
-];
 
-export default function Login({setAuthStatus}) {
+export default function Login({ setAuthStatus }) {
     const [email, setEmail] = useState('');
-    const [password, setPassword] = useState('');
     const [message, setMessage] = useState('');
+    const [password, setPassword] = useState('');
     const [redirect, setRedirect] = useState(false);
 
-    const handleSubmit = (event) => {
-        event.preventDefault();
-        const user = users.find(user => user.email === email && user.password === password);
-        if (user) {
-            setMessage('Login successful!');
+    const signIn = async (e) => {
+        e.preventDefault();
+        try {
+            await signInWithEmailAndPassword(auth, email, password);
             setAuthStatus(AuthStatus.LOGGED_IN);
             setRedirect(true);
-        } else {
-            setMessage('Invalid email or password.');
+        } catch (err) {
+            console.error(err);
+            setMessage(err.message);
         }
     };
 
     if (redirect) {
         return <Redirect to="/" />;
     }
-    return(
+    return (
         <section className="bg-white font-family-karla h-screen">
             <div className="w-full flex flex-wrap">
                 <div className="w-1/2 shadow-2xl">
@@ -40,7 +36,7 @@ export default function Login({setAuthStatus}) {
                 <div className="bg-purple-300 w-full md:w-1/2 flex flex-col">
                     <div className="flex flex-col justify-center md:justify-start my-auto pt-8 md:pt-0 px-8 md:px-24 lg:px-32">
                         <p className="text-center text-4xl font-bold">Welcome Back!</p>
-                        <form className="flex flex-col pt-3 md:pt-8" onSubmit={handleSubmit}>
+                        <form className="flex flex-col pt-3 md:pt-8" onSubmit={signIn}>
                             <div className="flex flex-col pt-4">
                                 <label htmlFor="email" className="text-lg">Email</label>
                                 <input required type="email" id="email" placeholder="example@email.com" className="rounded-lg shadow appearance-none border w-full p-3 text-gray-700 mt-1 leading-tight focus:outline-none focus:shadow-outline" value={email} onChange={(e) => setEmail(e.target.value)} />
